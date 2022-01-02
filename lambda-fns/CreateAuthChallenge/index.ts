@@ -1,9 +1,9 @@
+import { randomUUID } from 'crypto';
 import { CognitoUserPoolTriggerHandler } from 'aws-lambda';
-import { randomDigits } from 'crypto-secure-random-digit';
 
 export const handler: CognitoUserPoolTriggerHandler = async event => {
     // Generate a new login code
-    const loginCode = randomDigits(16).join('');
+    const loginCode = randomUUID();
 
     // This is sent back to the client app
     event.response.publicChallengeParameters = {
