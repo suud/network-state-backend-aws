@@ -7,25 +7,26 @@ export class NetworkStateBackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // Auth Flow Lambda Functions
     const createAuthChallengeLambda = new Function(this, 'CreateAuthChallengeLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: Code.fromAsset('lambda-fns/CreateAuthChallenge'),
+      code: Code.fromAsset('lambda-fns/auth/CreateAuthChallenge'),
     })
     const defineAuthChallengeLambda = new Function(this, 'DefineAuthChallengeLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: Code.fromAsset('lambda-fns/DefineAuthChallenge'),
+      code: Code.fromAsset('lambda-fns/auth/DefineAuthChallenge'),
     })
     const preSignUpLambda = new Function(this, 'PreSignUpLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: Code.fromAsset('lambda-fns/PreSignUp'),
+      code: Code.fromAsset('lambda-fns/auth/PreSignUp'),
     })
     const verifyAuthChallengeResponseLambda = new Function(this, 'VerifyAuthChallengeResponseLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: Code.fromAsset('lambda-fns/VerifyAuthChallengeResponse'),
+      code: Code.fromAsset('lambda-fns/auth/VerifyAuthChallengeResponse'),
     })
 
     // Cognito User Pool
