@@ -17,6 +17,9 @@ cd network-state-backend
 
 # install dependencies
 npm install
+cd lambda-layers/web3/nodejs
+npm install
+cd ../../..
 
 # compile typescript to js
 npm run build
