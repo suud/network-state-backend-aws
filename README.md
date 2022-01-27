@@ -1,8 +1,31 @@
-# Welcome to your CDK TypeScript project!
+# network-state-backend-aws
 
-This is a blank project for TypeScript development with CDK.
+Deploy an API that can only be accessed by users holding your token.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Prerequisites
+
+- [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_prerequisites)
+
+If you are using AWS CDK for the first time, check out the [Introduction to the CDK workshop](https://cdkworkshop.com/).
+
+## Usage
+
+```
+# clone repository
+git clone git@github.com:suud/network-state-backend.git
+cd network-state-backend
+
+# install dependencies
+npm install
+
+# compile typescript to js
+npm run build
+
+# deploy stack
+cdk deploy \
+    --parameters rpcUrl=... \
+    --parameters contractAddress=...
+```
 
 ## Useful commands
 
