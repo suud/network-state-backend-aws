@@ -11,7 +11,7 @@ export const handler = async event => {
     ];
     const randomJoke = jokeArray[Math.floor(Math.random() * jokeArray.length)];
 
-    // return quote
+    // return joke
     return sendResponse(200, randomJoke);
 };
 
@@ -19,7 +19,8 @@ const sendResponse = (status: number, body: string) => {
     var response = {
         statusCode: status,
         headers: {
-            "Content-Type": "text/html"
+            "Content-Type": "text/html",
+            "Access-Control-Allow-Origin": "*"
         },
         body: body
     };
