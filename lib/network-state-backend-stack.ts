@@ -1,4 +1,4 @@
-import { Stack, StackProps, CfnOutput } from 'aws-cdk-lib';
+import { Stack, StackProps, CfnOutput, CfnParameter } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { UserPool, UserPoolClient, AccountRecovery } from 'aws-cdk-lib/aws-cognito';
@@ -50,10 +50,22 @@ export class NetworkStateBackendStack extends Stack {
     });
 
     // Protected Lambda Function - only accessible by authenticated users
+    const rpcUrl = new CfnParameter(this, 'rpcUrl', {
+      type: 'String',
+      description: 'RPC URL of chain provider.'
+    });
+    const contractAddress = new CfnParameter(this, 'rpcUrl', {
+      type: 'String',
+      description: 'Address of token smart contract'
+    });
     const getJokeLambda = new Function(this, 'GetJokeLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
       code: Code.fromAsset('lambda-fns/GetJoke'),
+      environment: {
+        rpcUrl: rpcUrl.valueAsString,
+        contractAddress: contractAddress.valueAsString
+      }
     });
 
     // REST API

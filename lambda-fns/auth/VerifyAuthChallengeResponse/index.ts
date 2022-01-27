@@ -3,8 +3,8 @@ import { CognitoUserPoolTriggerHandler } from 'aws-lambda';
 
 export const handler: CognitoUserPoolTriggerHandler = async event => {
     // TODO: use env variables to set rpcUrl and contractAdress
-    const rpcUrl = 'https://rinkeby-light.eth.linkpool.io/';
-    const contractAddress = '';
+    const rpcUrl = process.env.rpcUrl;
+    const contractAddress = process.env.contractAddress;
     // We only need the balanceOf function
     const contractABI = [
         {
