@@ -27,7 +27,8 @@ npm run build
 # deploy stack
 cdk deploy \
     --parameters rpcUrl=... \
-    --parameters contractAddress=...
+    --parameters contractAddress=... \
+    --parameters tokenId=...
 ```
 
 ## Useful commands

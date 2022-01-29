@@ -13,7 +13,7 @@ export const handler: CognitoUserPoolTriggerHandler = async event => {
     // Add the data to the private challenge parameters
     // so it can be verified by the "Verify Auth Challenge Response" trigger
     event.response.privateChallengeParameters = {
-        username: event.request.userAttributes.username,
+        userName: event.userName,
         loginCode: loginCode,
     };
 

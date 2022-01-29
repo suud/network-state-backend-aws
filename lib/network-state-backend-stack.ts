@@ -1,12 +1,33 @@
 import { Stack, StackProps, CfnOutput, CfnParameter } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Code, Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { UserPool, UserPoolClient, AccountRecovery } from 'aws-cdk-lib/aws-cognito';
-import { AuthorizationType, CognitoUserPoolsAuthorizer, HttpIntegration, LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { AuthorizationType, CognitoUserPoolsAuthorizer, LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 
 export class NetworkStateBackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+
+    // Parameters - required for auth process
+    const rpcUrl = new CfnParameter(this, 'rpcUrl', {
+      type: 'String',
+      description: 'RPC URL of chain provider.'
+    });
+    const contractAddress = new CfnParameter(this, 'contractAddress', {
+      type: 'String',
+      description: 'Address of token smart contract.'
+    });
+    const tokenId = new CfnParameter(this, 'tokenId', {
+      type: 'String',
+      description: 'Id of ERC1155 token.'
+    });
+
+    // Lambda Layer with web3 dependency
+    const web3DependencyLayer = new LayerVersion(this, 'Web3DependencyLayer', {
+      compatibleRuntimes: [Runtime.NODEJS_14_X],
+      code: Code.fromAsset('lambda-layers/web3'),
+      description: 'web3 library'
+    });
 
     // Auth Flow Lambda Functions
     const createAuthChallengeLambda = new Function(this, 'CreateAuthChallengeLambda', {
@@ -27,7 +48,13 @@ export class NetworkStateBackendStack extends Stack {
     const verifyAuthChallengeResponseLambda = new Function(this, 'VerifyAuthChallengeResponseLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
+      layers: [web3DependencyLayer],
       code: Code.fromAsset('lambda-fns/auth/VerifyAuthChallengeResponse'),
+      environment: {
+        rpcUrl: rpcUrl.valueAsString,
+        contractAddress: contractAddress.valueAsString,
+        tokenId: tokenId.valueAsString
+      }
     })
 
     // Cognito User Pool
@@ -50,22 +77,10 @@ export class NetworkStateBackendStack extends Stack {
     });
 
     // Protected Lambda Function - only accessible by authenticated users
-    const rpcUrl = new CfnParameter(this, 'rpcUrl', {
-      type: 'String',
-      description: 'RPC URL of chain provider.'
-    });
-    const contractAddress = new CfnParameter(this, 'rpcUrl', {
-      type: 'String',
-      description: 'Address of token smart contract'
-    });
     const getJokeLambda = new Function(this, 'GetJokeLambda', {
       runtime: Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: Code.fromAsset('lambda-fns/GetJoke'),
-      environment: {
-        rpcUrl: rpcUrl.valueAsString,
-        contractAddress: contractAddress.valueAsString
-      }
+      code: Code.fromAsset('lambda-fns/GetJoke')
     });
 
     // REST API
