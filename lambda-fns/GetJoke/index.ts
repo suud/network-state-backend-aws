@@ -19,8 +19,9 @@ const sendResponse = (status: number, body: string) => {
     var response = {
         statusCode: status,
         headers: {
-            "Content-Type": "text/html",
-            "Access-Control-Allow-Origin": "*"
+            'Content-Type': 'text/html',
+            // Don't use '*' for production environments
+            'Access-Control-Allow-Origin': '*'
         },
         body: body
     };
