@@ -12,7 +12,7 @@ If you are using AWS CDK for the first time, check out the [Introduction to the 
 
 ```
 # clone repository
-git clone git@github.com:suud/network-state-backend.git
+git clone git@github.com:suud/network-state-backend-aws.git
 cd network-state-backend
 
 # install dependencies
