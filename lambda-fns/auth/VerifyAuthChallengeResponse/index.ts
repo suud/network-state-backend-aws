@@ -5,14 +5,14 @@ export const handler: CognitoUserPoolTriggerHandler = async event => {
     const rpcUrl = process.env.rpcUrl;
     const contractAddress = process.env.contractAddress;
     const tokenId = process.env.tokenId;
-
     const username = event.request.privateChallengeParameters!.userName;
     const loginCode = event.request.privateChallengeParameters!.loginCode;
 
     // Recover pubKey that was used to sign challengeAnswer
     const web3 = new Web3(rpcUrl);
     const signKey = await web3.eth.accounts.recover(loginCode, event.request.challengeAnswer);
-
+    
+    // Get token balance
     let tokenBalance = 0.0;
     if (signKey.toLowerCase() === username.toLowerCase()) {
         tokenBalance = await getTokenBalance(web3, signKey, contractAddress, tokenId);
