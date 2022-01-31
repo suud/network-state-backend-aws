@@ -6,6 +6,8 @@ Deploy an API that can only be accessed by users holding your token.
 
 This repository contains an AWS CDK Stack that deploys the *AWS Cognito* and *Network State API* resources of the sequence diagram. Have a look at [suud/network-state-example-app-react](https://github.com/suud/network-state-example-app-react) for an implementation of the other parts.
 
+Learn more about the motivation behind this repository by reading [this article](https://blog.suud.org/aws-cognito-nft-auth).
+
 ## Prerequisites
 
 - [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_prerequisites)
